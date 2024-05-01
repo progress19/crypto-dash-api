@@ -118,18 +118,35 @@ class ApiController extends Controller
     {
 
         $response = $this->binanceClient->loanFlexibleLoanableData(['loanCoin' => 'AXS',]);
-
         $this->setCorsHeaders();
-
         return response()->json(['data' => $response]);
 
     }
 
     protected function setCorsHeaders()
     {
-        header('Access-Control-Allow-Origin: http://localhost:3000');
+        header('Access-Control-Allow-Origin: *');  // Not recommended for production
         header('Access-Control-Allow-Methods: GET');
         header('Access-Control-Allow-Headers: Content-Type, Authorization');
     }
+
+    protected function setCorsHeadersX()
+    {
+        $allowedOrigins = [
+            'http://localhost:3000',
+            'https://crypto-dash-front.vercel.app/',  // Add additional origins here
+            'https://another-domain.com',
+        ];
+    
+        if (in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
+            header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+        } else {
+            // Handle case where origin is not allowed (optional)
+        }
+    
+        header('Access-Control-Allow-Methods: GET');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+    }
+    
 
 }
